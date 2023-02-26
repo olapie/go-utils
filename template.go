@@ -1,9 +1,10 @@
 package utils
 
 import (
-	"go.olapie.com/ctxutil/internal/templates"
 	htmlTemplate "html/template"
 	textTemplate "text/template"
+
+	"go.olapie.com/utils/internal/templates"
 )
 
 var HTMLTemplateFuncMap = htmlTemplate.FuncMap{
