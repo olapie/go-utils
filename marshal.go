@@ -109,3 +109,19 @@ func Unmarshal(data []byte, i any) (err error) {
 
 	return fmt.Errorf("cannot unmarshal into: %T", i)
 }
+
+func MustJSONBytes(i any) []byte {
+	b, err := json.Marshal(i)
+	if err != nil {
+		panic(err)
+	}
+	return b
+}
+
+func MustJSONString(i any) string {
+	b, err := json.Marshal(i)
+	if err != nil {
+		panic(err)
+	}
+	return string(b)
+}
