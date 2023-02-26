@@ -1,7 +1,6 @@
-package netkit
+package utils
 
 import (
-	"go.olapie.com/ctxutil/testutil"
 	"net"
 	"testing"
 	"time"
@@ -27,7 +26,7 @@ func TestMulticast(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer conn.Close()
-	packet := testutil.RandomBytes(10)
+	packet := RandomBytes(10)
 	buf := make([]byte, 2000)
 	received := make(chan error)
 
@@ -53,12 +52,12 @@ func TestMulticast(t *testing.T) {
 	time.Sleep(time.Second)
 	select {
 	case err := <-received:
-		testutil.NoError(t, err)
+		MustNotErrorT(t, err)
 	case <-time.After(time.Second):
 		t.Fatal("failed to receive udp packet")
 	}
 
-	testutil.Equal(t, packet, buf)
+	MustEqualT(t, packet, buf)
 	t.Log(packet)
 	t.Log(buf)
 }
@@ -81,8 +80,12 @@ func TestGetBroadcastIPv4(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer conn.Close()
-	_, err = conn.Write(testutil.RandomBytes(10))
+	_, err = conn.Write(RandomBytes(10))
 	if err != nil {
 		t.Fatal(err)
 	}
+}
+
+func TestGetOutboundIPString(t *testing.T) {
+	t.Log(GetOutboundIPString())
 }

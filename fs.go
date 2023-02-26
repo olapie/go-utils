@@ -1,4 +1,4 @@
-package fsutil
+package utils
 
 import (
 	"io/fs"
@@ -15,7 +15,7 @@ func (f *prefixFS) Open(name string) (fs.File, error) {
 	return f.fs.Open(name)
 }
 
-// Prefix delegates Open(filename) to fs.Open(prefix+"/"+filename)
-func Prefix(prefix string, fs fs.FS) fs.FS {
+// PrefixFS delegates Open(filename) to fs.Open(prefix+"/"+filename)
+func PrefixFS(prefix string, fs fs.FS) fs.FS {
 	return &prefixFS{prefix: prefix, fs: fs}
 }

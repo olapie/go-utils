@@ -1,4 +1,4 @@
-package termutil
+package utils
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"golang.org/x/term"
 )
 
-func ReadOne() (byte, error) {
+func StdinRead() (byte, error) {
 	oldState, err := term.MakeRaw(int(os.Stdin.Fd()))
 	if err != nil {
 		return 0, err
@@ -26,7 +26,7 @@ func ReadOne() (byte, error) {
 	return b[0], nil
 }
 
-func ReadPassword(msg ...any) string {
+func StdinReadPassword(msg ...any) string {
 	var pass []byte
 	var err error
 	for len(pass) == 0 {
@@ -41,10 +41,10 @@ func ReadPassword(msg ...any) string {
 	return string(pass)
 }
 
-func ReadConfirmedPassword(prompt1, prompt2 string) *string {
+func StdinReadPassword2(prompt1, prompt2 string) *string {
 	for i := 0; i < 3; i++ {
-		pass1 := ReadPassword(prompt1)
-		pass2 := ReadPassword(prompt2)
+		pass1 := StdinReadPassword(prompt1)
+		pass2 := StdinReadPassword(prompt2)
 		if pass1 == pass2 {
 			return &pass1
 		}
@@ -52,7 +52,7 @@ func ReadConfirmedPassword(prompt1, prompt2 string) *string {
 	return nil
 }
 
-func ConfirmInput(answer string) bool {
+func StdinConfirmInput(answer string) bool {
 	answer = strings.TrimSpace(answer)
 	if answer == "" {
 		panic("answer cannot be empty")

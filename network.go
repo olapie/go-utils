@@ -1,4 +1,4 @@
-package netkit
+package utils
 
 import (
 	"encoding/binary"
@@ -220,6 +220,30 @@ func FindTCPPort(ip string, minPort, maxPort int) int {
 		}
 	}
 	return 0
+}
+
+// GetOutboundIP returns preferred outbound ip of this machine
+func GetOutboundIP() net.IP {
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		log.Println("net.Dial:", err)
+		return nil
+	}
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+	if err = conn.Close(); err != nil {
+		log.Println("conn.Close:", err)
+		return nil
+	}
+	return localAddr.IP
+}
+
+// GetOutboundIPString returns preferred outbound ip of this machine
+func GetOutboundIPString() string {
+	ip := GetOutboundIP()
+	if ip != nil {
+		return ip.String()
+	}
+	return ""
 }
 
 // BroadcastUDP sends packet to all devices in the same LAN
