@@ -79,3 +79,11 @@ func FilterSlice[E any](a []E, filter func(e E) bool) []E {
 	}
 	return res
 }
+
+func SliceToSet[E comparable](a []E) map[E]bool {
+	m := make(map[E]bool)
+	for _, v := range a {
+		m[v] = true
+	}
+	return m
+}
