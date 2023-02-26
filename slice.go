@@ -87,3 +87,103 @@ func SliceToSet[E comparable](a []E) map[E]bool {
 	}
 	return m
 }
+
+func MustTransformSlice[E1 any, E2 any](a []E1, f func(e E1) E2) []E2 {
+	res := make([]E2, len(a))
+	for i, e := range a {
+		res[i] = f(e)
+	}
+	return res
+}
+
+func TransformSlice[E1 any, E2 any](a []E1, f func(e E1) (E2, error)) ([]E2, error) {
+	res := make([]E2, len(a))
+	for i, e := range a {
+		e2, err := f(e)
+		if err != nil {
+			return nil, err
+		}
+		res[i] = e2
+	}
+	return res, nil
+}
+
+func CastToIntSlice[T ~int](a []T) []int {
+	res := make([]int, len(a))
+	for i, v := range a {
+		res[i] = int(v)
+	}
+	return res
+}
+
+func CastFromIntSlice[T ~int](a []int) []T {
+	res := make([]T, len(a))
+	for i, v := range a {
+		res[i] = T(v)
+	}
+	return res
+}
+
+func CastToInt16Slice[T ~int16](a []T) []int16 {
+	res := make([]int16, len(a))
+	for i, v := range a {
+		res[i] = int16(v)
+	}
+	return res
+}
+
+func CastFromInt16Slice[T ~int16](a []int16) []T {
+	res := make([]T, len(a))
+	for i, v := range a {
+		res[i] = T(v)
+	}
+	return res
+}
+
+func CastToInt32Slice[T ~int32](a []T) []int32 {
+	res := make([]int32, len(a))
+	for i, v := range a {
+		res[i] = int32(v)
+	}
+	return res
+}
+
+func CastFromInt32Slice[T ~int32](a []int32) []T {
+	res := make([]T, len(a))
+	for i, v := range a {
+		res[i] = T(v)
+	}
+	return res
+}
+
+func CastToInt64Slice[T ~int64](a []T) []int64 {
+	res := make([]int64, len(a))
+	for i, v := range a {
+		res[i] = int64(v)
+	}
+	return res
+}
+
+func CastFromInt64Slice[T ~int64](a []int64) []T {
+	res := make([]T, len(a))
+	for i, v := range a {
+		res[i] = T(v)
+	}
+	return res
+}
+
+func CastToStringSlice[T ~string](a []T) []string {
+	res := make([]string, len(a))
+	for i, v := range a {
+		res[i] = string(v)
+	}
+	return res
+}
+
+func CastFromStringSlice[T ~string](a []int64) []T {
+	res := make([]T, len(a))
+	for i, v := range a {
+		res[i] = T(v)
+	}
+	return res
+}
