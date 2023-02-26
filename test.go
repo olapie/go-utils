@@ -77,27 +77,28 @@ func ShouldFalseT(t testing.TB, b bool, args ...any) {
 }
 
 func MustErrorT(t testing.TB, err error, args ...any) {
-	if err != nil {
-		args = append([]any{err}, args...)
+	if err == nil {
 		t.Fatal(args...)
 	}
 }
 
 func ShouldErrorT(t testing.TB, err error, args ...any) {
-	if err != nil {
+	if err == nil {
 		args = append([]any{err}, args...)
 		t.Error(args...)
 	}
 }
 
 func MustNotErrorT(t testing.TB, err error, args ...any) {
-	if err == nil {
+	if err != nil {
+		args = append([]any{err}, args...)
 		t.Fatal(args...)
 	}
 }
 
 func ShouldNotErrorT(t testing.TB, err error, args ...any) {
-	if err == nil {
+	if err != nil {
+		args = append([]any{err}, args...)
 		t.Error(args...)
 	}
 }
