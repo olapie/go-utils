@@ -77,10 +77,6 @@ func WithLogin[T comparable](ctx context.Context, v T) context.Context {
 	return context.WithValue(ctx, keyLogin, v)
 }
 
-func HasLogin(ctx context.Context) bool {
-	return ctx.Value(keyLogin) != nil
-}
-
 func WithSudo(ctx context.Context) context.Context {
 	return context.WithValue(ctx, keySudo, true)
 }
