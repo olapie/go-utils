@@ -61,6 +61,15 @@ func RemoveElement[E comparable](a []E, v E) []E {
 	return a
 }
 
+func ContainsElement[E comparable](a []E, e E) bool {
+	for _, v := range a {
+		if v == e {
+			return true
+		}
+	}
+	return false
+}
+
 func IndexOfSlice[E comparable](a []E, v E) int {
 	for i, e := range a {
 		if e == v {
