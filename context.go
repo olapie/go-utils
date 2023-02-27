@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net/http"
 	"reflect"
 )
 
@@ -108,19 +107,19 @@ func WithLogger[T any](ctx context.Context, logger T) context.Context {
 }
 
 type requestContextInfo struct {
-	AppID      string
-	ClientID   string
-	HttpHeader http.Header
-	ServiceID  string
-	TraceID    string
-	TestFlag   bool
+	AppID         string
+	Authorization string
+	ClientID      string
+	ServiceID     string
+	TraceID       string
+	TestFlag      bool
 }
 
 type RequestContextBuilder interface {
 	Build() context.Context
 	WithAppID(v string) RequestContextBuilder
+	WithAuthorization(v string) RequestContextBuilder
 	WithClientID(v string) RequestContextBuilder
-	WithHTTPHeader(v http.Header) RequestContextBuilder
 	WithServiceID(v string) RequestContextBuilder
 	WithTraceID(v string) RequestContextBuilder
 	WithTestFlag(v bool) RequestContextBuilder
@@ -144,13 +143,13 @@ func (b *requestContextBuilderImpl) WithAppID(v string) RequestContextBuilder {
 	return b
 }
 
-func (b *requestContextBuilderImpl) WithClientID(v string) RequestContextBuilder {
-	b.info.ClientID = v
+func (b *requestContextBuilderImpl) WithAuthorization(v string) RequestContextBuilder {
+	b.info.Authorization = v
 	return b
 }
 
-func (b *requestContextBuilderImpl) WithHTTPHeader(v http.Header) RequestContextBuilder {
-	b.info.HttpHeader = v
+func (b *requestContextBuilderImpl) WithClientID(v string) RequestContextBuilder {
+	b.info.ClientID = v
 	return b
 }
 
@@ -177,12 +176,12 @@ func GetAppID(ctx context.Context) string {
 	return info.AppID
 }
 
-func GetHTTPHeader(ctx context.Context) http.Header {
+func GetAuthorization(ctx context.Context) string {
 	info, _ := ctx.Value(keyRequestInfo).(*requestContextInfo)
 	if info == nil {
-		return nil
+		return ""
 	}
-	return info.HttpHeader
+	return info.Authorization
 }
 
 func GetTraceID(ctx context.Context) string {
