@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"reflect"
 )
 
 func WrapError(err error, format string, a ...any) error {
@@ -25,6 +26,10 @@ func CauseError(err error) error {
 }
 
 func GetErrorCode(err error) int {
+	if err == nil {
+		return 0
+	}
+
 	if s, ok := err.(interface{ Code() int }); ok {
 		return s.Code()
 	}
@@ -79,5 +84,45 @@ func GetErrorCode(err error) int {
 		return int(s.GetStatus())
 	}
 
+	v := reflect.ValueOf(Indirect(err))
+	t := v.Type()
+	switch v.Kind() {
+	case reflect.Struct:
+		for i := 0; i < t.NumField(); i++ {
+			ft := t.Field(i)
+			switch ft.Name {
+			case "Code", "Status", "StatusCode", "ErrorCode":
+				fv := v.Field(i)
+				if fv.CanInt() {
+					return int(fv.Int())
+				}
+
+				if fv.CanUint() {
+					return int(fv.Uint())
+				}
+
+				return 0
+			}
+		}
+	case reflect.Map:
+		for _, k := range v.MapKeys() {
+			if k.Kind() != reflect.String {
+				continue
+			}
+			switch k.String() {
+			case "Code", "Status", "StatusCode", "ErrorCode":
+				vv := v.MapIndex(k)
+				if vv.CanInt() {
+					return int(vv.Int())
+				}
+
+				if vv.CanUint() {
+					return int(vv.Uint())
+				}
+
+				return 0
+			}
+		}
+	}
 	return 0
 }
