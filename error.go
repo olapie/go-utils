@@ -26,6 +26,7 @@ func CauseError(err error) error {
 }
 
 func GetErrorCode(err error) int {
+	err = CauseError(err)
 	if err == nil {
 		return 0
 	}
