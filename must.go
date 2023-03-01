@@ -44,9 +44,9 @@ func MustNil(v any, msgAndArgs ...any) {
 		return
 	}
 
-	s := fmt.Sprintf("%#v", v)
+	s := fmt.Sprintf("%v", v)
 	if len(msgAndArgs) == 0 {
-		panic("")
+		panic(s)
 	}
 	format := s + " " + fmt.Sprint(msgAndArgs[0])
 	panic(fmt.Sprintf(format, msgAndArgs[1:]...))

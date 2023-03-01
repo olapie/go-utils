@@ -2,7 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"
 	"syscall"
@@ -30,13 +29,13 @@ func StdinReadPassword(msg ...any) string {
 	var pass []byte
 	var err error
 	for len(pass) == 0 {
-		log.Print(msg...)
-		log.Print(": ")
+		fmt.Print(msg...)
+		fmt.Print(": ")
 		pass, err = terminal.ReadPassword(syscall.Stdin)
 		if err != nil {
 			panic(err)
 		}
-		log.Println()
+		fmt.Println()
 	}
 	return string(pass)
 }
@@ -57,7 +56,7 @@ func StdinConfirmInput(answer string) bool {
 	if answer == "" {
 		panic("answer cannot be empty")
 	}
-	log.Printf("Enter '%s' to confirm: ", answer)
+	fmt.Printf("Enter '%s' to confirm: ", answer)
 	var actual string
 	fmt.Scanln(&actual)
 	return actual == answer
