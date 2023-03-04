@@ -117,7 +117,7 @@ func TransformSlice[E1 any, E2 any](a []E1, f func(e E1) (E2, error)) ([]E2, err
 	return res, nil
 }
 
-func CastToIntSlice[T ~int](a []T) []int {
+func CastToIntSlice[T ~int | ~int32 | ~int16 | ~int8](a []T) []int {
 	res := make([]int, len(a))
 	for i, v := range a {
 		res[i] = int(v)
@@ -133,7 +133,7 @@ func CastFromIntSlice[T ~int](a []int) []T {
 	return res
 }
 
-func CastToInt16Slice[T ~int16](a []T) []int16 {
+func CastToInt16Slice[T ~int16 | ~int8 | ~int](a []T) []int16 {
 	res := make([]int16, len(a))
 	for i, v := range a {
 		res[i] = int16(v)
@@ -149,7 +149,7 @@ func CastFromInt16Slice[T ~int16](a []int16) []T {
 	return res
 }
 
-func CastToInt32Slice[T ~int32](a []T) []int32 {
+func CastToInt32Slice[T ~int32 | ~int16 | ~int8 | ~int](a []T) []int32 {
 	res := make([]int32, len(a))
 	for i, v := range a {
 		res[i] = int32(v)
@@ -165,7 +165,7 @@ func CastFromInt32Slice[T ~int32](a []int32) []T {
 	return res
 }
 
-func CastToInt64Slice[T ~int64](a []T) []int64 {
+func CastToInt64Slice[T ~int64 | ~int16 | ~int32 | ~int | ~int8](a []T) []int64 {
 	res := make([]int64, len(a))
 	for i, v := range a {
 		res[i] = int64(v)
@@ -189,7 +189,7 @@ func CastToStringSlice[T ~string](a []T) []string {
 	return res
 }
 
-func CastFromStringSlice[T ~string](a []int64) []T {
+func CastFromStringSlice[T ~string](a []string) []T {
 	res := make([]T, len(a))
 	for i, v := range a {
 		res[i] = T(v)
