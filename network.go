@@ -114,26 +114,33 @@ GetPrivateIPv4Interface returns an interface with private ip, a LAN interface
 func GetPrivateIPv4Interface() *net.Interface {
 	interfaces, err := net.Interfaces()
 	if err != nil {
+		fmt.Println("No network interface")
 		return nil
 	}
 
+	var res net.Interface
+	var maxMaskSize int
 	for _, i := range interfaces {
 		addrs, err := i.Addrs()
 		if err != nil {
-			return nil
+			continue
 		}
 
 		for _, addr := range addrs {
 			if ipNet, ok := addr.(*net.IPNet); ok {
 				if ip := ipNet.IP.To4(); ip != nil {
 					if ip.IsPrivate() {
-						return &i
+						maskSize, _ := ipNet.Mask.Size()
+						if maskSize > maxMaskSize {
+							res = i
+							maxMaskSize = maskSize
+						}
 					}
 				}
 			}
 		}
 	}
-	return nil
+	return &res
 }
 
 // GetBroadcastIPv4 returns broadcast ip
@@ -146,6 +153,9 @@ func GetBroadcastIPv4(ifi *net.Interface) net.IP {
 		return nil
 	}
 	ipNet := GetPrivateIPv4Net(ifi)
+	if ipNet == nil {
+		return nil
+	}
 	ip4 := ipNet.IP.To4()
 	if ip4 == nil {
 		return nil

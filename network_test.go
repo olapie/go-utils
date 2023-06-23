@@ -69,6 +69,10 @@ func TestGetBroadcastIPv4(t *testing.T) {
 		t.FailNow()
 	}
 	ip := GetBroadcastIPv4(ifi)
+	if ip == nil {
+		t.Logf("%v has no ipv4", ifi)
+		t.FailNow()
+	}
 	t.Log(ip.String())
 
 	udpAddr, err := net.ResolveUDPAddr("udp", ip.String()+":7819")
