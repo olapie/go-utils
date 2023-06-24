@@ -112,15 +112,15 @@ GetPrivateIPv4Interface returns an interface with private ip, a LAN interface
 16-bit block	192.168.0.0 – 192.168.255.255	65536	192.168.0.0/16 (255.255.0.0)	16 bits	16 bits	256 contiguous class C networks
 */
 func GetPrivateIPv4Interface() *net.Interface {
-	interfaces, err := net.Interfaces()
+	ifaces, err := net.Interfaces()
 	if err != nil {
 		fmt.Println("No network interface")
 		return nil
 	}
 
-	var res net.Interface
+	var res *net.Interface
 	var maxMaskSize int
-	for _, i := range interfaces {
+	for _, i := range ifaces {
 		addrs, err := i.Addrs()
 		if err != nil {
 			continue
@@ -128,19 +128,17 @@ func GetPrivateIPv4Interface() *net.Interface {
 
 		for _, addr := range addrs {
 			if ipNet, ok := addr.(*net.IPNet); ok {
-				if ip := ipNet.IP.To4(); ip != nil {
-					if ip.IsPrivate() {
-						maskSize, _ := ipNet.Mask.Size()
-						if maskSize > maxMaskSize {
-							res = i
-							maxMaskSize = maskSize
-						}
+				if ip := ipNet.IP.To4(); ip != nil && ip.IsPrivate() {
+					maskSize, _ := ipNet.Mask.Size()
+					if maskSize > maxMaskSize {
+						res = Addr(i)
+						maxMaskSize = maskSize
 					}
 				}
 			}
 		}
 	}
-	return &res
+	return res
 }
 
 // GetBroadcastIPv4 returns broadcast ip
