@@ -93,3 +93,7 @@ func TestGetBroadcastIPv4(t *testing.T) {
 func TestGetOutboundIPString(t *testing.T) {
 	t.Log(GetOutboundIPString())
 }
+
+func TestGetPrivateIPv4(t *testing.T) {
+	GetPrivateIPv4(GetPrivateIPv4Interface())
+}
