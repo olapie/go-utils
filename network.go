@@ -118,9 +118,17 @@ func GetPrivateIPv4Interface() *net.Interface {
 		return nil
 	}
 
+	sort.Slice(ifaces, func(i, j int) bool {
+		return ifaces[i].Name < ifaces[j].Name
+	})
+
 	var res *net.Interface
 	var minMaskSize = 32
 	for _, i := range ifaces {
+		// ethernet
+		if !strings.HasPrefix(i.Name, "en") {
+			continue
+		}
 		addrs, err := i.Addrs()
 		if err != nil {
 			continue
