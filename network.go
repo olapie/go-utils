@@ -119,7 +119,7 @@ func GetPrivateIPv4Interface() *net.Interface {
 	}
 
 	var res *net.Interface
-	var maxMaskSize int
+	var minMaskSize int
 	for _, i := range ifaces {
 		addrs, err := i.Addrs()
 		if err != nil {
@@ -130,9 +130,9 @@ func GetPrivateIPv4Interface() *net.Interface {
 			if ipNet, ok := addr.(*net.IPNet); ok {
 				if ip := ipNet.IP.To4(); ip != nil && ip.IsPrivate() {
 					maskSize, _ := ipNet.Mask.Size()
-					if maskSize > maxMaskSize {
+					if maskSize <= minMaskSize {
 						res = Addr(i)
-						maxMaskSize = maskSize
+						minMaskSize = maskSize
 					}
 				}
 			}
