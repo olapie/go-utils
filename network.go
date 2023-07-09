@@ -119,7 +119,7 @@ func GetPrivateIPv4Interface() *net.Interface {
 	}
 
 	var res *net.Interface
-	var minMaskSize int
+	var minMaskSize = 32
 	for _, i := range ifaces {
 		addrs, err := i.Addrs()
 		if err != nil {
