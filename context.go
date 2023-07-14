@@ -20,6 +20,7 @@ const (
 	keyEnd
 )
 
+// Deprecated: use context.WithoutCancel() instead
 func DetachContext(ctx context.Context) context.Context {
 	newCtx := context.Background()
 	for k := keyStart; k < keyEnd; k++ {

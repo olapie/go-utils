@@ -4,6 +4,7 @@ import (
 	"reflect"
 )
 
+// Deprecated: use slices.Clone() instead
 func CloneSlice[T any](a []T) []T {
 	res := make([]T, len(a))
 	copy(res, a)
@@ -23,6 +24,7 @@ func UniqueSlice[E comparable](a []E) []E {
 	return l
 }
 
+// Deprecated: use slices.Reverse()
 func ReverseSlice[E comparable](a []E) {
 	for i, j := 0, len(a)-1; i < j; i, j = i+1, j-1 {
 		a[i], a[j] = a[j], a[i]
@@ -61,6 +63,7 @@ func RemoveElement[E comparable](a []E, v E) []E {
 	return a
 }
 
+// Deprecated: use slices.Contains() instead
 func ContainsElement[E comparable](a []E, e E) bool {
 	for _, v := range a {
 		if v == e {
@@ -70,6 +73,7 @@ func ContainsElement[E comparable](a []E, e E) bool {
 	return false
 }
 
+// Deprecated: use slices.Index() instead
 func IndexOfSlice[E comparable](a []E, v E) int {
 	for i, e := range a {
 		if e == v {
@@ -79,6 +83,7 @@ func IndexOfSlice[E comparable](a []E, v E) int {
 	return -1
 }
 
+// Deprecated: use slices.DeleteFunc() instead
 func FilterSlice[E any](a []E, filter func(e E) bool) []E {
 	res := make([]E, 0, len(a)/2)
 	for _, v := range a {

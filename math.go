@@ -24,31 +24,3 @@ func Sum[T Number](a ...T) T {
 	}
 	return sum
 }
-
-func Max[T Number](a ...T) T {
-	if len(a) == 0 {
-		return T(0)
-	}
-
-	res := a[0]
-	for _, v := range a {
-		if v > res {
-			res = v
-		}
-	}
-	return res
-}
-
-func Min[T Number](a ...T) T {
-	if len(a) == 0 {
-		return T(0)
-	}
-
-	res := a[0]
-	for _, v := range a {
-		if v < res {
-			res = v
-		}
-	}
-	return res
-}
