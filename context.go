@@ -87,26 +87,6 @@ func IsSudo(ctx context.Context) bool {
 	return b
 }
 
-func GetLogger[T any](ctx context.Context) T {
-	v, _ := ctx.Value(keyLogger).(T)
-	return v
-}
-
-func WithLogger[T any](ctx context.Context, logger T) context.Context {
-	var l T
-	if any(logger) == any(l) {
-		return ctx
-	}
-
-	v := ctx.Value(keyLogger)
-	if v != nil {
-		if reflect.TypeOf(v).AssignableTo(reflect.TypeOf(l)) {
-			panic(fmt.Sprintf("cannot override existing logger[%T] with different type [%T]", v, l))
-		}
-	}
-	return context.WithValue(ctx, keyLogger, logger)
-}
-
 type requestContextInfo struct {
 	AppID         string
 	Authorization string
