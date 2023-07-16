@@ -12,7 +12,7 @@ func CleanUp(f func()) {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		received := <-c
-		slog.Info("received signal", slog.String("signal", received.String()))
+		slog.Info(received.String())
 		f()
 	}()
 }
