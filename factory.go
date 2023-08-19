@@ -5,22 +5,24 @@ import (
 	"sync"
 )
 
-type Factory[T any] struct {
-	mu      sync.RWMutex // one lock is okay, as most cases are just read lock
-	cache   map[string]T
-	creator func() T
+type NamedInstanceInitializer[T any] func(ctx context.Context, key string) T
+
+type NamedInstanceFactory[T any] struct {
+	mu          sync.RWMutex // one lock is okay, as most cases are just read lock
+	cache       map[string]T
+	initializer NamedInstanceInitializer[T]
 }
 
-func NewFactory[T any](creator func() T) *Factory[T] {
-	return &Factory[T]{
-		cache:   map[string]T{},
-		creator: creator,
+func NewNamedInstanceFactory[T any](initializer NamedInstanceInitializer[T]) *Factory[T] {
+	return &NamedInstanceFactory[T]{
+		cache:       map[string]T{},
+		initializer: initializer,
 	}
 }
 
-func (f *Factory[T]) Get(ctx context.Context, key string) T {
+func (f *NamedInstanceFactory[T]) Get(ctx context.Context, name string) T {
 	f.mu.RLock()
-	instance, ok := f.cache[key]
+	instance, ok := f.cache[name]
 	f.mu.RUnlock()
 	if ok {
 		return instance
@@ -28,10 +30,10 @@ func (f *Factory[T]) Get(ctx context.Context, key string) T {
 
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	instance, ok = f.cache[key]
+	instance, ok = f.cache[name]
 	if !ok {
-		instance = f.creator()
-		f.cache[key] = instance
+		instance = f.initializer(ctx, name)
+		f.cache[name] = instance
 	}
 	return instance
 }
