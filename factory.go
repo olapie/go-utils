@@ -13,7 +13,7 @@ type NamedInstanceFactory[T any] struct {
 	initializer NamedInstanceInitializer[T]
 }
 
-func NewNamedInstanceFactory[T any](initializer NamedInstanceInitializer[T]) *Factory[T] {
+func NewNamedInstanceFactory[T any](initializer NamedInstanceInitializer[T]) *NamedInstanceFactory[T] {
 	return &NamedInstanceFactory[T]{
 		cache:       map[string]T{},
 		initializer: initializer,
