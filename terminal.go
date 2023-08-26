@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"syscall"
 
 	"golang.org/x/crypto/ssh/terminal"
 	"golang.org/x/term"
@@ -31,7 +30,9 @@ func StdinReadPassword(msg ...any) string {
 	for len(pass) == 0 {
 		fmt.Print(msg...)
 		fmt.Print(": ")
-		pass, err = terminal.ReadPassword(syscall.Stdin)
+		//syscall.Stdin doesn't work on Windows
+		//pass, err = terminal.ReadPassword(syscall.Stdin)
+		pass, err = terminal.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
 			panic(err)
 		}
