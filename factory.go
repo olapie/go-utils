@@ -5,10 +5,6 @@ import (
 	"sync"
 )
 
-type ObjectInitFuncTypes[T any] interface {
-	func(ctx context.Context, id string) (T, error) | func(ctx context.Context, id string) T
-}
-
 type ObjectFactory[T any] struct {
 	mu          sync.RWMutex // one lock is okay, as most cases are just read lock
 	cache       map[string]T
@@ -46,7 +42,7 @@ type ObjectFactoryE[T any] struct {
 	initializer func(ctx context.Context, id string) (T, error)
 }
 
-func NewObjectFactoryE[T any, F ObjectInitFuncTypes[T]](initializer func(ctx context.Context, id string) (T, error)) *ObjectFactoryE[T] {
+func NewObjectFactoryE[T any](initializer func(ctx context.Context, id string) (T, error)) *ObjectFactoryE[T] {
 	return &ObjectFactoryE[T]{
 		cache:       map[string]T{},
 		initializer: initializer,
