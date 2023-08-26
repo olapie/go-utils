@@ -29,7 +29,7 @@ func (f *ObjectFactory[T]) Get(ctx context.Context, id string) T {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 	obj, ok = f.cache[id]
-	if ok {
+	if !ok {
 		obj = f.initializer(ctx, id)
 	}
 	f.cache[id] = obj
