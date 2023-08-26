@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-type NamedInstanceInitializer[T any] func(ctx context.Context, key string) T
+type NamedInstanceInitializer[T any] func(ctx context.Context, key string) (T, error)
 
 type NamedInstanceFactory[T any] struct {
 	mu          sync.RWMutex // one lock is okay, as most cases are just read lock
@@ -20,20 +20,23 @@ func NewNamedInstanceFactory[T any](initializer NamedInstanceInitializer[T]) *Na
 	}
 }
 
-func (f *NamedInstanceFactory[T]) Get(ctx context.Context, name string) T {
+func (f *NamedInstanceFactory[T]) Get(ctx context.Context, name string) (instance T, err error) {
 	f.mu.RLock()
 	instance, ok := f.cache[name]
 	f.mu.RUnlock()
 	if ok {
-		return instance
+		return instance, nil
 	}
 
 	f.mu.Lock()
 	defer f.mu.Unlock()
 	instance, ok = f.cache[name]
 	if !ok {
-		instance = f.initializer(ctx, name)
+		instance, err = f.initializer(ctx, name)
+		if err != nil {
+			return instance, err
+		}
 		f.cache[name] = instance
 	}
-	return instance
+	return instance, nil
 }
