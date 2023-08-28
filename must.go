@@ -43,6 +43,16 @@ func MustFalse(b bool, msgAndArgs ...any) {
 // MustError panics if v is not nil
 func MustError(v error, msgAndArgs ...any) {
 	if v == nil {
+		if len(msgAndArgs) == 0 {
+			panic("")
+		}
+		panic(fmt.Sprintf(fmt.Sprint(msgAndArgs[0]), msgAndArgs[1:]...))
+	}
+}
+
+// MustNoError panics if v is nil
+func MustNoError(v error, msgAndArgs ...any) {
+	if v == nil {
 		return
 	}
 
@@ -52,16 +62,6 @@ func MustError(v error, msgAndArgs ...any) {
 	}
 	format := s + " " + fmt.Sprint(msgAndArgs[0])
 	panic(fmt.Sprintf(format, msgAndArgs[1:]...))
-}
-
-// MustNoError panics if v is nil
-func MustNoError(v error, msgAndArgs ...any) {
-	if v == nil {
-		if len(msgAndArgs) == 0 {
-			panic("")
-		}
-		panic(fmt.Sprintf(fmt.Sprint(msgAndArgs[0]), msgAndArgs[1:]...))
-	}
 }
 
 // MustNilPtr panics if v is not nil
