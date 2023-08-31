@@ -74,11 +74,12 @@ func ToCamel(s string) string {
 	s = strings.ReplaceAll(s, "-", "_")
 	a := strings.Split(s, "_")
 	for i := 1; i < len(a); i++ {
-		if abbreviations[a[i]] {
-			a[i] = strings.ToUpper(a[i])
-		} else if a[i] != "" {
-			a[i] = strings.ToUpper(a[i][0:1]) + a[i][1:]
-		}
+		//if abbreviations[a[i]] {
+		//	a[i] = strings.ToUpper(a[i])
+		//} else if a[i] != "" {
+		//	a[i] = strings.ToUpper(a[i][0:1]) + a[i][1:]
+		//}
+		a[i] = strings.ToUpper(a[i][0:1]) + a[i][1:]
 	}
 	return strings.Join(a, "")
 }
