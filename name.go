@@ -68,17 +68,30 @@ func ToSnake(s string) string {
 	return string(snake)
 }
 
+func ToJSONStyleCamel(s string) string {
+	s = strings.ReplaceAll(s, ".", "_")
+	s = strings.ReplaceAll(s, "-", "_")
+	a := strings.Split(s, "_")
+	for i := 1; i < len(a); i++ {
+		if a[i] != "" {
+			a[i] = strings.ToUpper(a[i][0:1]) + a[i][1:]
+		}
+		a[i] = strings.ToUpper(a[i][0:1]) + a[i][1:]
+	}
+	return strings.Join(a, "")
+}
+
 // ToCamel converts s from Snake to Camel
 func ToCamel(s string) string {
 	s = strings.ReplaceAll(s, ".", "_")
 	s = strings.ReplaceAll(s, "-", "_")
 	a := strings.Split(s, "_")
 	for i := 1; i < len(a); i++ {
-		//if abbreviations[a[i]] {
-		//	a[i] = strings.ToUpper(a[i])
-		//} else if a[i] != "" {
-		//	a[i] = strings.ToUpper(a[i][0:1]) + a[i][1:]
-		//}
+		if abbreviations[a[i]] {
+			a[i] = strings.ToUpper(a[i])
+		} else if a[i] != "" {
+			a[i] = strings.ToUpper(a[i][0:1]) + a[i][1:]
+		}
 		a[i] = strings.ToUpper(a[i][0:1]) + a[i][1:]
 	}
 	return strings.Join(a, "")
@@ -89,19 +102,19 @@ func ToClassName(s string) string {
 		return ""
 	}
 	s = ToCamel(s)
-	//stop := len(s)
-	//for i, c := range s {
-	//	if c >= 'A' && c <= 'Z' {
-	//		stop = i
-	//		break
-	//	}
-	//}
+	stop := len(s)
+	for i, c := range s {
+		if c >= 'A' && c <= 'Z' {
+			stop = i
+			break
+		}
+	}
 
-	//if abbreviations[s[:stop]] {
-	//	s = strings.ToUpper(s[:stop]) + s[stop:]
-	//} else {
-	//	s = strings.ToUpper(s[:1]) + s[1:]
-	//}
+	if abbreviations[s[:stop]] {
+		s = strings.ToUpper(s[:stop]) + s[stop:]
+	} else {
+		s = strings.ToUpper(s[:1]) + s[1:]
+	}
 	s = strings.ToUpper(s[:1]) + s[1:]
 	return s
 }
