@@ -90,12 +90,12 @@ func ToClassName(s string) string {
 	}
 	s = ToCamel(s)
 	//stop := len(s)
-	for i, c := range s {
-		if c >= 'A' && c <= 'Z' {
-			stop = i
-			break
-		}
-	}
+	//for i, c := range s {
+	//	if c >= 'A' && c <= 'Z' {
+	//		stop = i
+	//		break
+	//	}
+	//}
 
 	//if abbreviations[s[:stop]] {
 	//	s = strings.ToUpper(s[:stop]) + s[stop:]
