@@ -14,5 +14,10 @@ func CleanUp(f func()) {
 		received := <-c
 		slog.Info(received.String())
 		f()
+		if sig, ok := received.(syscall.Signal); ok {
+			os.Exit(int(sig))
+		} else {
+			os.Exit(0)
+		}
 	}()
 }
